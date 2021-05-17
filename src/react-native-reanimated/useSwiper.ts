@@ -163,17 +163,17 @@ const useEvents = ({
   return { onActive, onEnd, onStart };
 };
 
-export const useSwiper = ({
-  initialIndex = 0,
-  minimum = Number.MIN_SAFE_INTEGER,
-  maximum = Number.MAX_SAFE_INTEGER,
-  autoplay = false,
-  autoplayInterval = 3000,
-  onChange: onChangeProp,
-  onChangeNative = DEFAULT_HANDLE,
-  ...rest
-}: UseSwiperProps) => {
-  const { layout = WIDTH } = rest;
+export const useSwiper = (props: UseSwiperProps) => {
+  const {
+    initialIndex = 0,
+    minimum = Number.MIN_SAFE_INTEGER,
+    maximum = Number.MAX_SAFE_INTEGER,
+    autoplay = false,
+    autoplayInterval = 3000,
+    onChange: onChangeProp,
+    onChangeNative = DEFAULT_HANDLE,
+    layout = WIDTH,
+  } = props;
   const offset = useValue<number>(initialIndex);
   const current = useValue<number>(initialIndex);
   const index = useValue<number>(initialIndex);
@@ -224,32 +224,35 @@ export const useSwiper = ({
   });
 
   const getContext = React.useCallback(
-    (ctx: SnapContext): SwiperContext => ({
-      ...ctx,
-      offset,
-      current,
-      nextIndex,
-      index,
-      setBy,
-      start,
-      stop,
-      clamp,
-    }),
+    (ctx: SnapContext): SwiperContext =>
+      Object.assign({}, ctx, {
+        offset,
+        current,
+        nextIndex,
+        index,
+        setBy,
+        start,
+        stop,
+        clamp,
+      }),
     [current, clamp, index, nextIndex, offset, setBy, start, stop],
   );
 
   return useSnapResult(
-    useSnap({
-      ...rest,
-      ...useEvents({
-        getContext,
-        stop: stopNative,
-        start: startNative,
-        velocity,
-        layout,
-        clamp,
-      }),
-    }),
+    useSnap(
+      Object.assign(
+        {},
+        props,
+        useEvents({
+          getContext,
+          stop: stopNative,
+          start: startNative,
+          velocity,
+          layout,
+          clamp,
+        }),
+      ),
+    ),
     getContext,
   );
 };
