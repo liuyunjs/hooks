@@ -1,6 +1,6 @@
 {
   "name": "@liuyunjs/hooks",
-  "version": "1.0.0-beta1",
+  "version": "1.0.0-beta3",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "liuyunjs",
@@ -28,14 +28,14 @@
     "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.2",
     "ts-toolbelt": "^9.6.0",
-    "typescript": "^4.2.4"
+    "typescript": "^4.2.4",
+    "react": ">=16.8.0",
+    "react-native-gesture-handler": "^1.10.3",
+    "react-native-reanimated": "^1.13.3"
   },
   "dependencies": {
     "@liuyunjs/timer": "^1.0.0-beta3",
     "@liuyunjs/utils": "1.0.0-beta5",
-    "react": ">=16.8.0",
-    "react-native-gesture-handler": "^1.10.3",
-    "react-native-reanimated": "^1.13.3",
     "react-use-callback": "^0.0.3",
     "react-will-mount-hook": "^1.0.1",
     "tslib": "^2.2.0"

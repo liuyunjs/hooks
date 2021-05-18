@@ -46,7 +46,7 @@ export const useAnimate = <State extends Animated.AnimationState, Config>({
   const toValue = useValue<number>(0);
   const clock = useClock();
 
-  state = useMemoizeJSONObject(state);
+  state = useMemoizeJSONObject(state, 0);
 
   useCode(() => {
     const { finished, time } = state;

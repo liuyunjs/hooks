@@ -1,5 +1,5 @@
 import { Clock } from 'react-native-reanimated';
-import { useWillMount } from 'react-will-mount-hook';
+import { useWillMount } from '../useWillMount';
 
 const createClock = () => new Clock();
 

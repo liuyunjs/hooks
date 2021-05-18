@@ -8,6 +8,6 @@ export const useMemoize = <T extends (...args: any[]) => any>(
 ) => {
   const equaled = useEqualDeps(deps, level);
   const resultRef = React.useRef<ReturnType<T>>();
-  if (equaled) resultRef.current = factory();
+  if (!equaled) resultRef.current = factory();
   return resultRef.current!;
 };

@@ -1,6 +1,6 @@
 import { State } from 'react-native-gesture-handler';
 import Animated, { Value, event } from 'react-native-reanimated';
-import { useWillMount } from 'react-will-mount-hook';
+import { useWillMount } from '../useWillMount';
 
 export type GestureBaseContext = {
   gestureX: Animated.Value<number>;
