@@ -1,31 +1,34 @@
+import React from 'react';
 import Animated, { useValue, timing } from 'react-native-reanimated';
-import { Easing } from 'react-native-reanimated';
-import { FALSE, TrueOrFalse } from './constant';
-import { useAnimate, AnimateBaseProps } from './useAnimate';
+import { TIMING_CONFIG } from './constant';
+import { useAnimate_, AnimateBaseProps } from './useAnimate_';
 
 export type TimingProps = AnimateBaseProps<Animated.TimingConfig>;
-
-const TIMING_CONFIG: Omit<Animated.TimingConfig, 'toValue'> = {
-  duration: 300,
-  easing: Easing.linear,
-};
 
 export const useTiming = ({
   position,
   config,
   onEnd,
   onStart,
+  onUpdate,
 }: TimingProps) => {
-  const finished = useValue<TrueOrFalse>(FALSE);
-  const time = useValue<number>(0);
-  const frameTime = useValue<number>(0);
-
-  return useAnimate<Animated.TimingState, Animated.TimingConfig>({
-    state: { finished, frameTime, time, position },
+  return useAnimate_<Animated.TimingState, Animated.TimingConfig>({
+    getState: React.useCallback(
+      (position, finished, time, extraValue) => ({
+        position,
+        finished,
+        time,
+        frameTime: extraValue,
+      }),
+      [],
+    ),
     config,
+    extraValue: useValue<number>(0),
+    position,
     defaultConfig: TIMING_CONFIG,
     onEnd,
     onStart,
+    onUpdate,
     animate: timing,
   });
 };

@@ -17,7 +17,7 @@ import Animated, {
   useCode,
   onChange,
 } from 'react-native-reanimated';
-import { useReactCallback } from '../useReactCallback';
+import { useReactCallback } from 'react-use-callback';
 import { useTimeout } from '@liuyunjs/timer/lib/react';
 import { useSnap, SnapProps, SnapContext, useSnapResult } from './useSnap';
 import { useSpring } from './useSpring';
