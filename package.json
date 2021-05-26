@@ -1,6 +1,6 @@
 {
   "name": "@liuyunjs/hooks",
-  "version": "1.0.0-beta3",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "liuyunjs",
@@ -10,6 +10,10 @@
     "build": "rimraf lib; tsc",
     "build-example": "rimraf example/lib; tsc --outDir example/lib",
     "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liuyunjs/hooks"
   },
   "devDependencies": {
     "@babel/cli": "7.13.0",
@@ -41,7 +45,7 @@
   },
   "dependencies": {
     "@liuyunjs/timer": "^1.0.0-beta3",
-    "@liuyunjs/utils": "1.0.0-beta5",
+    "@liuyunjs/utils": "^1.0.0",
     "react-use-callback": "^0.0.3",
     "react-will-mount-hook": "^1.0.1",
     "tslib": "^2.2.0"

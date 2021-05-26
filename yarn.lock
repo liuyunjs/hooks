@@ -1164,10 +1164,10 @@
   dependencies:
     react-will-mount-hook "^1.0.1"
 
-"@liuyunjs/utils@1.0.0-beta5":
-  version "1.0.0-beta5"
-  resolved "https://registry.yarnpkg.com/@liuyunjs/utils/-/utils-1.0.0-beta5.tgz#b53a45469c7931ee7fac24a4faa58982d7378492"
-  integrity sha512-Mv4a7oFK9CY9U/y7MzzVGO32ihvyjGkKNK36HjLXF8AvWlP32ZmeYq3AXXd3Uo2zH2yerLEIquMZuyZ7e0mooQ==
+"@liuyunjs/utils@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.nlark.com/@liuyunjs/utils/download/@liuyunjs/utils-1.0.0.tgz#c01962b975443280f240231388c54124e46dbc96"
+  integrity sha1-wBliuXVEMoDyQCMTiMVBJORtvJY=
   dependencies:
     debounce "^1.2.0"
     is-arrayish "^0.3.2"
