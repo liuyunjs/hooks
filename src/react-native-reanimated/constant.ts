@@ -16,12 +16,12 @@ export const TIMING_CONFIG: Omit<Animated.TimingConfig, 'toValue'> = {
   easing: Easing.linear,
 };
 
-export const SPRING_CONFIG = {
+export const SPRING_CONFIG: Omit<Animated.SpringConfig, 'toValue'> = {
   stiffness: 1000,
   damping: 500,
   mass: 3,
   overshootClamping: true,
-  restDisplacementThreshold: 0.0001,
+  restDisplacementThreshold: 0.01,
   restSpeedThreshold: 0.01,
 };
 

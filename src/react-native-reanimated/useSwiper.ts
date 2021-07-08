@@ -103,13 +103,15 @@ const useEvents = ({
   layout,
   start,
   velocity,
+  toValue,
 }: {
   getContext: (ctx: SnapContext) => SwiperContext;
   stop: () => Animated.Adaptable<any>;
   clamp: (next: Animated.Adaptable<number>) => Animated.Adaptable<any>;
   layout: number;
-  start: (to: Animated.Adaptable<number>) => Animated.Adaptable<any>;
+  start: () => Animated.Adaptable<any>;
   velocity: Animated.Value<number>;
+  toValue: Animated.Value<number>;
 }) => {
   const setVelocity = React.useCallback(
     (ctx: SnapContext) => {
@@ -154,10 +156,11 @@ const useEvents = ({
       return block([
         setVelocity(ctx),
         set(ctx.nextIndex, clamp(sub(ctx.nextIndex, ctx.snap))),
-        start(ctx.nextIndex),
+        set(toValue, ctx.nextIndex),
+        start(),
       ]);
     },
-    [clamp, getContext, setVelocity, start],
+    [clamp, getContext, setVelocity, start, toValue],
   );
 
   return { onActive, onEnd, onStart };
@@ -179,6 +182,7 @@ export const useSwiper = (props: UseSwiperProps) => {
   const index = useValue<number>(initialIndex);
   const nextIndex = useValue<number>(initialIndex);
   const velocity = useValue<number>(0);
+  const toValue = useValue<number>(0);
 
   const clamp = React.useCallback(
     (num: Animated.Adaptable<number>) => {
@@ -201,6 +205,7 @@ export const useSwiper = (props: UseSwiperProps) => {
     position: current,
     velocity,
     onEnd: onAnimationEnd,
+    toValue,
   });
 
   const setBy = React.useCallback(
@@ -210,7 +215,7 @@ export const useSwiper = (props: UseSwiperProps) => {
         current.setValue(block([set(index, next), set(nextIndex, next)]));
         return;
       }
-      nextIndex.setValue(startNative(next));
+      nextIndex.setValue(block([set(toValue, next), startNative()]));
     },
     [clamp, current, index, nextIndex, startNative],
   );
@@ -247,6 +252,7 @@ export const useSwiper = (props: UseSwiperProps) => {
           getContext,
           stop: stopNative,
           start: startNative,
+          toValue,
           velocity,
           layout,
           clamp,

@@ -6,3 +6,4 @@ export * from './useSpring';
 export * from './useTiming';
 export * from './useSwiper';
 export * from './useDecay';
+export * from './useReactionValue';

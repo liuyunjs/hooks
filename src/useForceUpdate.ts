@@ -1,6 +1,7 @@
 import React from 'react';
+import { useConst } from './useConst';
 
 export const useForceUpdate = () => {
   const forceUpdate = React.useState([])[1];
-  return React.useCallback(() => forceUpdate([]), []);
+  return useConst(() => forceUpdate([]));
 };

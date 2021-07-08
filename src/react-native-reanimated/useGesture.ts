@@ -1,40 +1,37 @@
-import React from 'react';
 import { State } from 'react-native-gesture-handler';
 import Animated, {
-  useValue,
-  useCode,
   cond,
   eq,
   set,
   block,
+  useValue,
 } from 'react-native-reanimated';
+import { useCodeExec } from './useCodeExec';
 import { GestureBaseContext, useGestureBase } from './useGestureBase';
 import { TRUE, NOOP, TrueOrFalse, FALSE, DEFAULT_HANDLE } from './constant';
 
 export type GestureContext = GestureBaseContext & {
   isSwiping: Animated.Value<TrueOrFalse>;
+  exec: ReturnType<typeof useCodeExec>;
 };
 
-export type GestureProps = {
-  onStart?: (ctx: GestureContext) => Animated.Adaptable<any>;
-  onActive?: (ctx: GestureContext) => Animated.Adaptable<any>;
-  onEnd?: (ctx: GestureContext) => Animated.Adaptable<any>;
+export type GestureProps<T extends GestureContext> = {
+  onStart?: (ctx: T) => Animated.Adaptable<any>;
+  onActive?: (ctx: T) => Animated.Adaptable<any>;
+  onEnd?: (ctx: T) => Animated.Adaptable<any>;
 };
 
-export const useGesture = ({
+export const useGesture = <T extends GestureContext>({
   onEnd = DEFAULT_HANDLE,
   onStart = DEFAULT_HANDLE,
   onActive = DEFAULT_HANDLE,
-}: GestureProps) => {
-  const [gestureHandler, gestureCtx] = useGestureBase();
-  const isSwiping = useValue<TrueOrFalse>(FALSE);
+}: GestureProps<T>) => {
+  const gesture = useGestureBase();
 
-  const ctx: GestureContext = React.useMemo(
-    () => Object.assign({}, gestureCtx, { isSwiping }),
-    [gestureCtx, isSwiping],
-  );
+  const ctx = gesture[1] as T;
+  ctx.isSwiping = useValue<TrueOrFalse>(FALSE);
 
-  useCode(() => {
+  ctx.exec = useCodeExec(() => {
     const maybeStart = cond(ctx.isSwiping, NOOP, [
       onStart(ctx),
       set(ctx.isSwiping, TRUE),
@@ -47,7 +44,7 @@ export const useGesture = ({
       ),
       cond(eq(ctx.state, State.BEGAN), maybeStart),
     ]);
-  }, [onEnd, onStart, onActive, ctx]);
+  }, [onEnd, onStart, onActive]);
 
-  return [gestureHandler, ctx] as const;
+  return gesture as [(...args: any[]) => any, T];
 };

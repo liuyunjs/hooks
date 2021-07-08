@@ -9,40 +9,56 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  Button,
-} from 'react-native';
-import Animated, { useValue } from 'react-native-reanimated';
+import { SafeAreaView, Button } from 'react-native';
+import Animated, { useValue, call } from 'react-native-reanimated';
 import { useSpring } from './lib/react-native-reanimated/useSpring';
 import { useTiming } from './lib/react-native-reanimated/useTiming';
-import { useConst } from './lib/useConst';
 const App = () => {
-  const a = useValue<number>(0);
+  // const a = useValue<number>(0);
   const position = useValue(0);
   const velocity = useValue(0);
+  const toValue = useValue<number>(0);
   // const { start, stop } = useTiming({
   //   position,
-  //   config: useConst({
-  //     duration: 3000,
-  //   }),
+  //   duration: 3000,
+  //   toValue,
+  //   onUpdate(state) {
+  //     return call([state.finished, state.position], (...args) => {
+  //       console.log('onUpdate', args);
+  //     });
+  //   },
+  //   onStart(state) {
+  //     return call([state.finished, state.position], (...args) => {
+  //       console.log('onStart', args);
+  //     });
+  //   },
+  //   onEnd(state) {
+  //     return call([state.finished, state.position], (...args) => {
+  //       console.log('onEnd', args);
+  //     });
+  //   },
   // });
   const { start, stop } = useSpring({
     position,
-    // config: {
-    //   duration: 3000,
-    // },
-    config: useConst({
-      damping: 2,
-      stiffness: 10,
-    }),
+    onUpdate(state) {
+      return call([state.finished, state.position], (...args) => {
+        console.log('onUpdate', args);
+      });
+    },
+    onStart(state) {
+      return call([state.finished, state.position], (...args) => {
+        console.log('onStart', args);
+      });
+    },
+    onEnd(state) {
+      return call([state.finished, state.position], (...args) => {
+        console.log('onEnd', args);
+      });
+    },
+    damping: 2,
+    stiffness: 10,
     velocity,
+    toValue,
   });
 
   return (
@@ -50,13 +66,13 @@ const App = () => {
       <Button
         title="开始"
         onPress={() => {
-          a.setValue(start(1));
+          toValue.setValue([start(), 1]);
         }}
       />
       <Button
         title="停止"
         onPress={() => {
-          a.setValue(stop());
+          toValue.setValue(stop());
         }}
       />
       <Animated.View

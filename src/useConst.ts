@@ -1,5 +1,5 @@
-import { useWillMount } from './useWillMount';
+import React from 'react';
 
 export const useConst = <T>(input: T) => {
-  return useWillMount(() => input);
+  return React.useRef(input).current;
 };

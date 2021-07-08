@@ -1,6 +1,6 @@
 import { useReactionRef } from './useReactionRef';
 
-export const useReactionState = <S>(stateProps?: S | (() => S)) => {
-  const [ref, setRef] = useReactionRef(stateProps);
-  return [ref.value, setRef] as const;
+export const useReactionState = <S extends any>(input: S) => {
+  const [ref, set] = useReactionRef(input);
+  return [ref.current, set] as const;
 };
