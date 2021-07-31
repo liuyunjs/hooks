@@ -52,7 +52,6 @@ export const animateHookFactory = <
       onUpdate = DEFAULT_HANDLE,
     } = props;
 
-    // const animating = useValue<TrueOrFalse>(FALSE);
     const clock = useClock();
     const finished = useValue<TrueOrFalse>(FALSE);
     const time = useValue<number>(0);
@@ -62,51 +61,28 @@ export const animateHookFactory = <
     );
 
     const exec = useSwitch({
-      onTrueAlways: React.useCallback(
-        () =>
-          block([
-            cond(clockRunning(clock), NOOP, set(time, 0)),
-            animate(clock, state, config),
-            cond(clockRunning(clock), onUpdate(state), [
-              set(finished, FALSE),
-              onStart(state),
-              startClock(clock),
-            ]),
-            cond(finished, [exec.close(), stopClock(clock)]),
+      onTrueAlways: React.useCallback(() => {
+        return block([
+          cond(
+            clockRunning(clock),
+            NOOP,
+            'frameTime' in state
+              ? //  @ts-ignore
+                [set(time, 0), set(state.frameTime, 0)]
+              : set(time, 0),
+          ),
+          animate(clock, state, config),
+          cond(clockRunning(clock), onUpdate(state), [
+            set(finished, FALSE),
+            onStart(state),
+            startClock(clock),
           ]),
-        [onStart, onUpdate],
-      ),
+          cond(finished, [exec.close(), stopClock(clock)]),
+        ]);
+      }, [onStart, onUpdate]),
       onFalseAlways: useConst(() => stopClock(clock)),
       onFalse: React.useCallback(() => onEnd(state), [onEnd]),
     });
-
-    // useCode(() => {
-    //   return block([
-    //     cond(
-    //       animating,
-    //       [
-    //         cond(clockRunning(clock), NOOP, set(time, 0)),
-    //         animate(clock, state, config),
-    //         cond(clockRunning(clock), onUpdate(state), [
-    //           set(finished, FALSE),
-    //           onStart(state),
-    //           startClock(clock),
-    //         ]),
-    //         cond(finished, [set(animating, FALSE), stopClock(clock)]),
-    //       ],
-    //       [stopClock(clock)],
-    //     ),
-    //     onChange(animating, cond(animating, NOOP, onEnd(state))),
-    //   ]);
-    // }, [onStart, onUpdate, onEnd, state, config]);
-    //
-    // const start = useConst(() => {
-    //   return cond(animating, NOOP, set(animating, TRUE));
-    // });
-    //
-    // const stop = useConst(() => {
-    //   return cond(animating, set(animating, FALSE));
-    // });
 
     return {
       start: exec.open,

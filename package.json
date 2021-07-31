@@ -1,6 +1,6 @@
 {
   "name": "@liuyunjs/hooks",
-  "version": "1.1.0-beta2",
+  "version": "1.1.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "liuyunjs",
@@ -8,7 +8,7 @@
   "private": false,
   "scripts": {
     "build": "rimraf lib; tsc",
-    "build-example": "rimraf example/lib; tsc --outDir example/lib",
+    "prepublishOnly": "yarn build",
     "test": "jest"
   },
   "repository": {
